@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/davidjryan/BYOBlockchain#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "crypto-js": "^3.1.9-1",
     "knex": "^0.14.2",
     "nightmare": "^2.10.0",
     "pg": "^7.4.1"
