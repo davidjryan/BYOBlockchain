@@ -1,7 +1,7 @@
 exports.seed = function (knex, Promise) {
   // Deletes ALL existing entries
   return knex('wallets').del()
-    .then(() => knex('wallets').del())
+    .then(() => knex('transactions').del())
     .then(() => {
       return Promise.all([
         knex('wallets').insert([{
@@ -104,110 +104,164 @@ exports.seed = function (knex, Promise) {
             address: "0x900d0881a2e85a8e4076412ad1cefbe2d39c566c",
             balance: 100
           }], 'id')
-          .then(project => {
+          .then((wallets) => {
             return knex('transactions').insert([
-              { amount: 5,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              { 
+                amount: 5,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[1]
+
               },
               { 
                 amount: 10,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[1] 
               },
               { 
                 amount: 20,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[5],
+                from: wallets[7] 
               },
               { 
                 amount: 13,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[10],
+                from: wallets[11] 
               },
               { 
                 amount: 12,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[15],
+                from: wallets[6] 
               },
               { 
                 amount: 30,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[18],
+                from: wallets[23] 
               },
               { 
                 amount: 31,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[20],
+                from: wallets[24] 
               },
               { 
                 amount: 8,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[15],
+                from: wallets[11] 
               },
               { 
                 amount: 1,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[9],
+                from: wallets[2] 
               },
               { 
                 amount: 6,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[8],
+                from: wallets[6] 
               },
               { 
                 amount: 90,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[21],
+                from: wallets[18] 
               },
               { 
                 amount: 30,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[24],
+                from: wallets[1] 
               },
               { 
                 amount: 24,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[16] 
               },
               { 
                 amount: 21,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[1] 
               },
               { 
                 amount: 19,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[16] 
               },
               { 
                 amount: 1,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[17] 
               },
               { 
                 amount: 2,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[18] 
               },
               { 
                 amount: 8,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[1] 
               },
               { 
                 amount: 9,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[1] 
               },
               { 
                 amount: 10,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[1] 
               },
               { 
                 amount: 4,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[1] 
               },
               { 
                 amount: 7,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[1] 
               },
               { 
                 amount: 6,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[1] 
               },
               { 
                 amount: 3,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[0],
+                from: wallets[1] 
               },
               { 
                 amount: 8,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[11],
+                from: wallets[22] 
               },
               { 
                 amount: 9,
-                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6",
+                to: wallets[17],
+                from: wallets[11] 
               },
             ])
  
