@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.locals.title = 'palette-picker';
+app.locals.title = 'BYOBlockchain';
 
 const requireHTTPS = (req, res, next) => {
   if (req.headers['x-forwarded=proto'] !== 'https' && process.env.NODE_ENV === 'production') {
@@ -27,5 +27,12 @@ const requireHTTPS = (req, res, next) => {
   next();
 }
 
-app.use(requireHTTPS);
+// app.use(requireHTTPS);
 
+app.get('/', (request, response) => {
+  response.send('BYOB!!!!!!')
+});
+
+app.listen(app.get('port'), () => {
+  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+})
