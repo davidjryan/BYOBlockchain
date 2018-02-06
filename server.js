@@ -33,6 +33,26 @@ app.get('/', (request, response) => {
   response.send('BYOB!!!!!!')
 });
 
+app.get('/api/v1/transactions', (request, response) => {
+  database('transactions').select()
+    .then((transactions) => {
+      response.status(200).json(transactions);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
+
+app.get('/api/v1/wallets', (request, response) => {
+  database('wallets').select()
+    .then((wallets) => {
+      response.status(200).json(wallets);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 })
