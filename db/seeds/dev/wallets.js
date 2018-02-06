@@ -5,8 +5,8 @@ exports.seed = function (knex, Promise) {
     .then(() => {
       return Promise.all([
         knex('wallets').insert([{
-            "address": "0xb794f5ea0ba39494ce839613fffba74279579268",
-            "balance": "100"
+            address: "0xb794f5ea0ba39494ce839613fffba74279579268",
+            balance: 100
           },
           {
             address: "0x281055afc982d96fab65b3a49cac8b878184cb16",
@@ -106,10 +106,111 @@ exports.seed = function (knex, Promise) {
           }], 'id')
           .then(project => {
             return knex('transactions').insert([
-              { palette: "first", hex1: '#2f2fcf', hex2: '#2f2fcf', hex3: '#2f2fcf', hex4: '#2f2fcf', hex5: '#2f2fcf', project_id: project[0] },
-              { palette: "second", hex1: '#2f2fcf', hex2: '#2f2fcf', hex3: '#2f2fcf', hex4: '#2f2fcf', hex5: '#2f2fcf', project_id: project[0] },
-              { palette: "third", hex1: '#2f2fcf', hex2: '#2f2fcf', hex3: '#2f2fcf', hex4: '#2f2fcf', hex5: '#2f2fcf', project_id: project[0] },
+              { amount: 5,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 10,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 20,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 13,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 12,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 30,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 31,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 8,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 1,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 6,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 90,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 30,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 24,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 21,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 19,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 1,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 2,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 8,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 9,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 10,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 4,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 7,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 6,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 3,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 8,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
+              { 
+                amount: 9,
+                address: "baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6" 
+              },
             ])
+ 
           })
           .then(() => console.log('Seeding complete!'))
           .catch(error => console.log(`Error seeding data: ${error}`))
