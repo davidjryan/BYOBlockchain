@@ -1,0 +1,25 @@
+{
+  "name": "BYOBlockchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidjryan/BYOBlockchain.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidjryan/BYOBlockchain/issues"
+  },
+  "homepage": "https://github.com/davidjryan/BYOBlockchain#readme",
+  "dependencies": {
+    "knex": "^0.14.2",
+    "nightmare": "^2.10.0",
+    "pg": "^7.4.1"
+  }
+}
