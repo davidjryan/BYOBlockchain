@@ -53,6 +53,94 @@ app.get('/api/v1/wallets', (request, response) => {
     });
 });
 
+app.get('/api/v1/wallets/:id', (request, response) => {
+  const { id } = request.params;
+
+  database('wallets').where({ id }).select()
+    .then((wallet) => {
+      response.status(200).json(wallet);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
+
+app.post('/api/v1/wallets', (request, response) => {
+  const wallet = request.body;
+
+  for ( let requiredParams of ['address', 'balance']) {
+    if(!wallet[requiredParams]) {
+      return response.status(422).json({
+        error: `You are missing ${requiredParams}`
+      })
+    }
+  }
+
+  database('wallets').insert(wallet, 'id')
+  .then(wallet => {
+    return response.status(201).json({ id: wallet[0] })
+  })
+  .catch(error => {
+    return response.status(500).json({ error })
+  })
+})
+
+app.post('/api/v1/wallets/:id/transactions', (request, response) => {
+  const transaction = request.body;
+
+  for ( let requiredParams of ['address', 'balance']) {
+    if(!wallet[requiredParams]) {
+      return response.status(422).json({
+        error: `You are missing ${requiredParams}`
+      })
+    }
+  }
+
+  database('wallets').insert(wallet, 'id')
+  .then(wallet => {
+    return response.status(201).json({ id: wallet[0] })
+  })
+  .catch(error => {
+    return response.status(500).json({ error })
+  })
+})
+
+app.get('/api/v1/transactions/:id', (request, response) => {
+  const { id } = request.params;
+
+  database('transactions').where({ id }).select()
+    .then((transaction) => {
+      response.status(200).json(transaction);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
+
+app.delete('/api/v1/transactions/:id', (request, response) => {
+  const { id } = request.params;
+
+  database('transactions').where({ id }).del()
+    .then((transaction) => {
+      response.status(200).json(transaction);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
+
+app.delete('/api/v1/wallets/:id', (request, response) => {
+  const { id } = request.params;
+
+  database('wallets').where({ id }).del()
+    .then((wallet) => {
+      response.status(200).json(wallet);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 })

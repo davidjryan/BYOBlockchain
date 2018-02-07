@@ -19,7 +19,6 @@ exports.up = function (knex, Promise) {
       table.foreign('wallets_id').references('wallets.id');
       table.integer('transactions_id').unsigned();
       table.foreign('transactions_id').references('transactions.id');
-
     })
   ])
 };
