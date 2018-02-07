@@ -85,20 +85,20 @@ app.post('/api/v1/wallets', (request, response) => {
   })
 })
 
-app.post('/api/v1/wallets/:id/transactions', (request, response) => {
+app.post('/api/v1/transactions', (request, response) => {
   const transaction = request.body;
 
-  for ( let requiredParams of ['address', 'balance']) {
-    if(!wallet[requiredParams]) {
+  for ( let requiredParams of ['txHash', 'amount', 'to', 'from']) {
+    if(!transaction[requiredParams]) {
       return response.status(422).json({
         error: `You are missing ${requiredParams}`
       })
     }
   }
 
-  database('wallets').insert(wallet, 'id')
-  .then(wallet => {
-    return response.status(201).json({ id: wallet[0] })
+  database('transactions').insert(transaction, 'id')
+  .then(transaction => {
+    return response.status(201).json({ id: transaction[0] })
   })
   .catch(error => {
     return response.status(500).json({ error })
