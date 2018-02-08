@@ -1,4 +1,5 @@
 const Nightmare = require('nightmare');
+
 const nightmare = Nightmare({ show: true });
 const fs = require('fs');
 
@@ -10,24 +11,24 @@ nightmare
     const addressInfo = [];
 
     for (let i = 0; i < allAddresses.length; i++) {
-      let address = allAddresses[i].innerText;
+      const address = allAddresses[i].innerText;
 
-      addressInfo.push({ address })
+      addressInfo.push({ address });
     }
-
-    return addressInfo
+    
+    return addressInfo;
   })
   .end()
-  .then(result => {
+  .then((result) => {
     const output = JSON.stringify(result, null, 2);
     fs.writeFile('./wallet-data.json', output, 'utf8', (error) => {
       if (error) {
-        return console.log(error)
+        return console.log(error);
       }
-    })
-    console.log('File saved')
-    console.log(result)
+    });
+    console.log('File saved');
+    console.log(result);
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
   });

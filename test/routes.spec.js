@@ -61,7 +61,6 @@ describe('API Routes', () => {
       return chai.request(server)
       .get('/api/v1/wallets/1')
       .then(response => {
-        // console.log(response)
         response.should.have.status(200);
         response.should.be.json;
         response.body.should.be.a('array');
@@ -180,13 +179,6 @@ describe('API Routes', () => {
   })
 
   describe('POST api/v1/transactions', () => {
-    // let walletToPost;
-    // beforeEach( done => {
-    //   knex('wallets').then(wallet => {
-    //     walletToPost = wallet
-    //     done()
-    //   })
-    // })
 
     it('should post a transaction', () => {
     return chai.request(server)
@@ -194,13 +186,10 @@ describe('API Routes', () => {
       .send({
         txHash: '54321',
         amount: '500',
-        // to: `${walletToPost[0].id}`,
-        // from: `${walletToPost[1].id}`
         to: '1',
         from: '2'
       })
       .then(response => {
-        // console.log(response)
         response.should.have.status(201);
         response.should.be.a('object');
         response.body.should.have.property('id');
