@@ -44,11 +44,16 @@ describe('API Routes', () => {
       return chai.request(server)
       .get('/api/v1/wallets')
       .then(response => {
+        console.log(response.body[0])
         response.should.have.status(200);
         response.should.be.json;
         response.body.should.be.a('array');
         response.body.length.should.equal(25);
         response.res.should.be.a('object');
+        response.body[0].should.have.property('address');
+        response.body[0].address.should.equal('0xb794f5ea0ba39494ce839613fffba74279579268');
+        response.body[0].should.have.property('balance');
+        response.body[0].balance.should.equal(100);
       })
       .catch(err => {
         throw err;
@@ -156,8 +161,17 @@ describe('API Routes', () => {
     return chai.request(server)
       .get('/api/v1/transactions')
       .then(response => {
+        console.log(response.body[0])
         response.should.have.status(200);
         response.should.be.a('object');
+        response.body[0].should.have.property('txHash');
+        response.body[0].txHash.should.equal('baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6');
+        response.body[0].should.have.property('amount');
+        response.body[0].amount.should.equal(5);
+        response.body[0].should.have.property('to');
+        response.body[0].to.should.equal(1);
+        response.body[0].should.have.property('from');
+        response.body[0].to.should.equal(1);
       })
       .catch(error => {
         throw error;
@@ -194,13 +208,10 @@ describe('API Routes', () => {
       .send({
         txHash: '54321',
         amount: '500',
-        // to: `${walletToPost[0].id}`,
-        // from: `${walletToPost[1].id}`
         to: '1',
         from: '2'
       })
       .then(response => {
-        // console.log(response)
         response.should.have.status(201);
         response.should.be.a('object');
         response.body.should.have.property('id');
@@ -229,7 +240,7 @@ describe('API Routes', () => {
   })
 
   describe('PATCH api/v1/wallets/:id', () => {
-    it('should edit one transaction amount', () => {
+    it('should edit one wallet balance', () => {
       return chai.request(server)
         .patch('/api/v1/wallets/1')
         .send({
