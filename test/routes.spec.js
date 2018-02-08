@@ -219,7 +219,7 @@ describe('API Routes', () => {
           amount: '10000'
         })
         .then(response => {
-          response.should.have.status(204);
+          response.should.have.status(200);
           response.should.be.a('object');
         })
         .catch(error => {
@@ -236,7 +236,7 @@ describe('API Routes', () => {
           balance: '10000'
         })
         .then(response => {
-          response.should.have.status(204);
+          response.should.have.status(200);
           response.should.be.a('object');
         })
         .catch(error => {
