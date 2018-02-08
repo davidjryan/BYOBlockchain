@@ -142,7 +142,7 @@ app.delete('/api/v1/wallets/:id', (request, response) => {
 });
 
 app.listen(app.get('port'), () => {
-  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+  console.log(`${app.locals.title} is running on ${app.get('port')}. env: ${environment}`);
 })
 
 module.exports = app;
