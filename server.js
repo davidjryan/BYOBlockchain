@@ -123,7 +123,7 @@ app.patch('/api/v1/transactions/:id', (request, response) => {
 
   database('transactions').where('id', '=', id).update({ amount })
     .then((transaction) => {
-      response.status(204).json(transaction.id);
+      response.status(200).json(transaction.id);
     })
     .catch((error) => {
       response.status(500).json({ error });
@@ -152,7 +152,7 @@ app.patch('/api/v1/wallets/:id', (request, response) => {
 
   database('wallets').where('id', '=', id).update({ balance })
     .then((wallet) => {
-      response.status(204).json(wallet);
+      response.status(200).json(wallet);
     })
     .catch((error) => {
       response.status(500).json({ error });
