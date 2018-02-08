@@ -17,7 +17,6 @@ describe('Client Routes', () => {
       throw error;
     });
   });
-
 });
 
 describe('API Routes', () => {
@@ -34,10 +33,10 @@ describe('API Routes', () => {
       return chai.request(server)
       .get('/api/v1/wallets')
       .then(response => {
-        console.log(response)
         response.should.have.status(200);
         response.should.be.json;
-        response.body.should.be.a('object');
+        response.body.should.be.a('array');
+        response.body.length.should.equal(25);
         response.res.should.be.a('object');
       })
       .catch(err => {
@@ -45,5 +44,6 @@ describe('API Routes', () => {
       });
     });
   });
+
 
 });
