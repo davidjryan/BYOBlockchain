@@ -1,19 +1,16 @@
 const express = require('express');
+
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 
-// We want to know if we're in development, testing, or production environment.  
-// If we don't know, we'll assume we're in development.
 const environment = process.env.NODE_ENV || 'development';
-
-// Based on that environment, we'll fetch the database configuration from knexfile.js 
-// for whatever environment we're in  and now our express app will be able to connect to it.
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
 app.set('port', process.env.PORT || 3000);
-
+app.set('secretKey', 'mysecret');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -22,15 +19,46 @@ app.locals.title = 'BYOBlockchain';
 
 const requireHTTPS = (req, res, next) => {
   if (req.headers['x-forwarded=proto'] !== 'https' && process.env.NODE_ENV === 'production') {
-    return res.redirect('https://' + req.get('host') + req.url);
+    return res.redirect(`https://${req.get('host')}${req.url}`);
   }
   next();
-}
+};
 
 // app.use(requireHTTPS);
 
+app.post('/authenticate', (request, response) => {
+  const email = request.body.email;
+  const appName = request.body.appName;
+
+  if (!email || !appName) {
+    return response.status(422).json('Error: You are missing a required field');
+  }
+
+  const token = jwt.sign({ email, appName }, app.get('secretKey'), { expiresIn: '48h' });
+
+  console.log(token);
+
+  return response.status(201).json(token);
+});
+
+const checkAuth = (request, response, next) => {
+  const { token } = request.headers.token;
+
+  if (!token) {
+    return response.status(403).json('Error: You must be authorized to hit this endpoint.');
+  }
+
+  jwt.verify(token, app.get('secretKey'), (error) {
+    if (error) {
+      return response.status(403).json('Error: Invalid Token');
+    } else {
+      next();  
+    }
+  });
+};
+
 app.get('/', (request, response) => {
-  response.send('BYOB!!!!!!')
+  response.send('BYOB!!!!!!');
 });
 
 app.get('/api/v1/transactions', (request, response) => {
@@ -68,42 +96,34 @@ app.get('/api/v1/wallets/:id', (request, response) => {
 app.post('/api/v1/wallets', (request, response) => {
   const wallet = request.body;
 
-  for ( let requiredParams of ['address', 'balance']) {
-    if(!wallet[requiredParams]) {
+  for (const requiredParams of ['address', 'balance']) {
+    if (!wallet[requiredParams]) {
       return response.status(422).json({
         error: `You are missing ${requiredParams}`
-      })
+      });
     }
   }
 
   database('wallets').insert(wallet, 'id')
-  .then(wallet => {
-    return response.status(201).json({ id: wallet[0] })
-  })
-  .catch(error => {
-    return response.status(500).json({ error })
-  })
-})
+    .then(wallet => response.status(201).json({ id: wallet[0] }))
+    .catch(error => response.status(500).json({ error }));
+});
 
 app.post('/api/v1/transactions', (request, response) => {
   const transaction = request.body;
 
-  for ( let requiredParams of ['txHash', 'amount', 'to', 'from']) {
-    if(!transaction[requiredParams]) {
+  for (const requiredParams of ['txHash', 'amount', 'to', 'from']) {
+    if (!transaction[requiredParams]) {
       return response.status(422).json({
         error: `You are missing ${requiredParams}`
-      })
+      });
     }
   }
 
   database('transactions').insert(transaction, 'id')
-  .then(transaction => {
-    return response.status(201).json({ id: transaction[0] })
-  })
-  .catch(error => {
-    return response.status(500).json({ error })
-  })
-})
+    .then(transactionId => response.status(201).json({ id: transactionId[0] }))
+    .catch(error => response.status(500).json({ error }));
+});
 
 app.get('/api/v1/transactions/:id', (request, response) => {
   const { id } = request.params;
@@ -201,6 +221,6 @@ app.delete('/api/v1/wallets/:id', (request, response) => {
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}. env: ${environment}`);
-})
+});
 
 module.exports = app;
