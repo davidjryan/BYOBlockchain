@@ -211,4 +211,38 @@ describe('API Routes', () => {
     })
   })
 
+  describe('PATCH api/v1/transactions/:id', () => {
+    it('should edit one transaction amount', () => {
+      return chai.request(server)
+        .patch('/api/v1/transactions/1')
+        .send({
+          amount: '10000'
+        })
+        .then(response => {
+          response.should.have.status(204);
+          response.should.be.a('object');
+        })
+        .catch(error => {
+          throw error;
+        })
+    })
+  })
+
+  describe('PATCH api/v1/wallets/:id', () => {
+    it('should edit one transaction amount', () => {
+      return chai.request(server)
+        .patch('/api/v1/wallets/1')
+        .send({
+          balance: '10000'
+        })
+        .then(response => {
+          response.should.have.status(204);
+          response.should.be.a('object');
+        })
+        .catch(error => {
+          throw error;
+        })
+    })
+  })
+
 });
