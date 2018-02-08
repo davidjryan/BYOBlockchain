@@ -123,7 +123,36 @@ app.patch('/api/v1/transactions/:id', (request, response) => {
 
   database('transactions').where('id', '=', id).update({ amount })
     .then((transaction) => {
-      response.status(200).json(transaction);
+      response.status(200).json(transaction.id);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+
+  // database.transaction(function (trx) {
+  //   database('transactions').transacting(trx).insert({ name: 'Old Books' })
+  //     .then(function (resp) {
+  //       var id = resp[0];
+  //       return someExternalMethod(id, trx);
+  //     })
+  //     .then(trx.commit)
+  //     .catch(trx.rollback);
+  // })
+  //   .then(function (resp) {
+  //     console.log('Transaction complete.');
+  //   })
+  //   .catch(function (err) {
+  //     console.error(err);
+  //   });
+})
+
+app.patch('/api/v1/wallets/:id', (request, response) => {
+  const { id } = request.params;
+  const { balance } = request.body
+
+  database('wallets').where('id', '=', id).update({ balance })
+    .then((wallet) => {
+      response.status(200).json(wallet);
     })
     .catch((error) => {
       response.status(500).json({ error });
