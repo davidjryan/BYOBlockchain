@@ -1,7 +1,13 @@
 exports.seed = function (knex, Promise) {
   // Deletes ALL existing entries
   return knex('transactions').del()
+    .then( function () {
+      return knex.raw('ALTER SEQUENCE transactions_id_seq RESTART WITH 1')
+    })
     .then(() => knex('wallets').del())
+    .then( function () {
+      return knex.raw('ALTER SEQUENCE wallets_id_seq RESTART WITH 1')
+    })
     .then(() => {
       return Promise.all([
         knex('wallets').insert([{
