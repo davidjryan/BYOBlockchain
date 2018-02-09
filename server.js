@@ -24,7 +24,7 @@ const requireHTTPS = (req, res, next) => {
   next();
 };
 
-// app.use(requireHTTPS);
+app.use(requireHTTPS);
 
 app.post('/authenticate', (request, response) => {
   const email = request.body.email;
@@ -35,8 +35,6 @@ app.post('/authenticate', (request, response) => {
   }
 
   const token = jwt.sign({ email, appName }, app.get('secretKey'), { expiresIn: '48h' });
-
-  console.log(token);
 
   return response.status(201).json(token);
 });
@@ -56,6 +54,8 @@ const checkAuth = (request, response, next) => {
     }
   });
 };
+
+app.use(checkAuth);
 
 app.get('/', (request, response) => {
   response.send('BYOB!!!!!!');
@@ -148,22 +148,6 @@ app.patch('/api/v1/transactions/:id', (request, response) => {
     .catch((error) => {
       response.status(500).json({ error });
     });
-
-  // database.transaction(function (trx) {
-  //   database('transactions').transacting(trx).insert({ name: 'Old Books' })
-  //     .then(function (resp) {
-  //       var id = resp[0];
-  //       return someExternalMethod(id, trx);
-  //     })
-  //     .then(trx.commit)
-  //     .catch(trx.rollback);
-  // })
-  //   .then(function (resp) {
-  //     console.log('Transaction complete.');
-  //   })
-  //   .catch(function (err) {
-  //     console.error(err);
-  //   });
 });
 
 app.patch('/api/v1/wallets/:id', (request, response) => {
@@ -177,22 +161,6 @@ app.patch('/api/v1/wallets/:id', (request, response) => {
     .catch((error) => {
       response.status(500).json({ error });
     });
-
-  // database.transaction(function (trx) {
-  //   database('transactions').transacting(trx).insert({ name: 'Old Books' })
-  //     .then(function (resp) {
-  //       var id = resp[0];
-  //       return someExternalMethod(id, trx);
-  //     })
-  //     .then(trx.commit)
-  //     .catch(trx.rollback);
-  // })
-  //   .then(function (resp) {
-  //     console.log('Transaction complete.');
-  //   })
-  //   .catch(function (err) {
-  //     console.error(err);
-  //   });
 });
 
 app.delete('/api/v1/transactions/:id', (request, response) => {
@@ -223,6 +191,7 @@ app.delete('/api/v1/wallets/:id', (request, response) => {
 });
 
 app.listen(app.get('port'), () => {
+/* eslint-disable no-console */
   console.log(`${app.locals.title} is running on ${app.get('port')}. env: ${environment}`);
 });
 

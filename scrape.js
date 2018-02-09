@@ -23,12 +23,12 @@ nightmare
     const output = JSON.stringify(result, null, 2);
     fs.writeFile('./wallet-data.json', output, 'utf8', (error) => {
       if (error) {
+        /* eslint-disable no-console */
         return console.log(error);
       }
     });
-    console.log('File saved');
-    console.log(result);
   })
   .catch((error) => {
+  /* eslint-disable no-console */
     console.error(error);
   });
