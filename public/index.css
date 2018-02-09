@@ -27,3 +27,13 @@ button {
   border: none;
   padding: 0;
 }
+
+#token-container {
+  padding: 50px;
+  width: 400px;
+  height: 400px;
+}
+
+.appended-token {
+  word-break: break-all;
+}
