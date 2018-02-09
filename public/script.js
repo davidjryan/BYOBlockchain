@@ -6,15 +6,19 @@ const fetchToken = async () => {
 
   if (email.includes('turing.io')) {
     const initialFetch = await fetch('/authenticate', {
-      method: POST,
+      method: 'POST',
+      headers: {
+        'CONTENT-TYPE': 'application/json'
+      },
       body: JSON.stringify({
         email,
         appName
-      });
-    const token = initialFetch.json()
+      })
     })
+    const token = await initialFetch.json()
+    console.log(token)
+    document.getElementById('token-container').innerHTML=`<p class='appended-token'>Your JWT token is:${token}</p>`
   }
-  
 }
 
 document.getElementById('btn-jwt').addEventListener('click', fetchToken)

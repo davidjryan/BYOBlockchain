@@ -48,7 +48,7 @@ const checkAuth = (request, response, next) => {
     return response.status(403).json('Error: You must be authorized to hit this endpoint.');
   }
 
-  jwt.verify(token, app.get('secretKey'), (error) {
+  jwt.verify(token, app.get('secretKey'), (error) => {
     if (error) {
       return response.status(403).json('Error: Invalid Token');
     } else {
