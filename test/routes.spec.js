@@ -4,7 +4,7 @@ const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server');
-const knex = require('../db/knex')
+const knex = require('../db/knex');
 chai.use(chaiHttp);
 
 
@@ -24,9 +24,9 @@ describe('Client Routes', () => {
     return chai.request(server)
     .get('/sad')
     .then(response => {
-      response.should.have.status(404)
-    })
-  })
+      response.should.have.status(404);
+    });
+  });
 
 });
 
