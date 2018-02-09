@@ -20,7 +20,7 @@ exports.up = function (knex, Promise) {
       table.integer('transactions_id').unsigned();
       table.foreign('transactions_id').references('transactions.id');
     })
-  ])
+  ]);
 };
 
 exports.down = function (knex, Promise) {
@@ -28,5 +28,5 @@ exports.down = function (knex, Promise) {
     knex.schema.dropTable('wallets'),
     knex.schema.dropTable('transactions'),
     knex.schema.dropTable('wallets_transactions')
-  ])
+  ]);
 };

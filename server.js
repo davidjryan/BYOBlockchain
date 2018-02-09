@@ -139,7 +139,7 @@ app.get('/api/v1/transactions/:id', (request, response) => {
 
 app.patch('/api/v1/transactions/:id', (request, response) => {
   const { id } = request.params;
-  const { amount } = request.body
+  const { amount } = request.body;
 
   database('transactions').where('id', '=', id).update({ amount })
     .then((transaction) => {
@@ -164,11 +164,11 @@ app.patch('/api/v1/transactions/:id', (request, response) => {
   //   .catch(function (err) {
   //     console.error(err);
   //   });
-})
+});
 
 app.patch('/api/v1/wallets/:id', (request, response) => {
   const { id } = request.params;
-  const { balance } = request.body
+  const { balance } = request.body;
 
   database('wallets').where('id', '=', id).update({ balance })
     .then((wallet) => {
@@ -193,7 +193,7 @@ app.patch('/api/v1/wallets/:id', (request, response) => {
   //   .catch(function (err) {
   //     console.error(err);
   //   });
-})
+});
 
 app.delete('/api/v1/transactions/:id', (request, response) => {
   const { id } = request.params;
@@ -210,12 +210,15 @@ app.delete('/api/v1/transactions/:id', (request, response) => {
 app.delete('/api/v1/wallets/:id', (request, response) => {
   const { id } = request.params;
 
-  database('wallets').where({ id }).del()
-    .then((wallet) => {
-      response.status(200).json(wallet);
-    })
-    .catch((error) => {
-      response.status(500).json({ error });
+  database('transactions').where({ to: id }).orWhere({ from: id }).del()
+    .then(() => {
+      database('wallets').where({ id }).del()
+        .then((wallet) => {
+          response.status(200).json(wallet);
+        })
+        .catch((error) => {
+          response.status(500).json({ error });
+        });
     });
 });
 
