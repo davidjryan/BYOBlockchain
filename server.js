@@ -10,7 +10,6 @@ const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
 app.set('port', process.env.PORT || 3000);
-app.set('secretKey', 'mysecret');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -24,7 +23,12 @@ const requireHTTPS = (req, res, next) => {
   next();
 };
 
-// app.use(requireHTTPS);
+if (process.env.NODE_ENV === 'production') {
+  app.use(requireHTTPS); 
+  app.set('secretKey', process.env.secretKey); 
+} else {
+  app.set('secretKey', 'sdlfk');
+}
 
 app.post('/authenticate', (request, response) => {
   const email = request.body.email;
@@ -42,7 +46,8 @@ app.post('/authenticate', (request, response) => {
 });
 
 const checkAuth = (request, response, next) => {
-  const { token } = request.headers.token;
+  // console.log(request.headers.token);
+  const { token } = request.headers;
 
   if (!token) {
     return response.status(403).json('Error: You must be authorized to hit this endpoint.');
@@ -56,6 +61,23 @@ const checkAuth = (request, response, next) => {
     }
   });
 };
+
+const checkAdmin = (request, response, next) => {
+  const { token } = request.headers;
+
+  jwt.verify(token, app.get('secretKey'), (error, decoded) => {
+    if (error) {
+      return response.status(403).json('Error: Invalid Token');
+    } else if (decoded.email.includes('@turing.io')) {
+      next();
+    } else {
+      return response.status(403).json('Error: You are not authorized')
+    }
+  });
+}
+
+app.use(checkAuth)
+
 
 app.get('/', (request, response) => {
   response.send('BYOB!!!!!!');
@@ -92,6 +114,8 @@ app.get('/api/v1/wallets/:id', (request, response) => {
       response.status(500).json({ error });
     });
 });
+
+app.use(checkAdmin)
 
 app.post('/api/v1/wallets', (request, response) => {
   const wallet = request.body;
