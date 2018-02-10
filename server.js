@@ -208,13 +208,15 @@ app.delete('/api/v1/transactions/:id', (request, response) => {
 
 app.delete('/api/v1/wallets/:id', (request, response) => {
   const { id } = request.params;
-
-  database('wallets').where({ id }).del()
-    .then((wallet) => {
-      response.status(200).json(wallet);
-    })
-    .catch((error) => {
-      response.status(500).json({ error });
+  database('transactions').where({ to: id }).orWhere({ from: id }).del()
+    .then(() => {
+      database('wallets').where({ id }).del()
+        .then((wallet) => {
+          response.status(200).json(wallet);
+        })
+        .catch((error) => {
+          response.status(500).json({ error });
+        });
     });
 });
 
