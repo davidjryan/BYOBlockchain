@@ -10,7 +10,6 @@ const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
 app.set('port', process.env.PORT || 3000);
-app.set('secretKey', 'mysecret');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -24,7 +23,12 @@ const requireHTTPS = (req, res, next) => {
   next();
 };
 
-app.use(requireHTTPS);
+if (process.env.NODE_ENV === 'production') {
+  app.use(requireHTTPS); 
+  app.set('secretKey', process.env.secretKey); 
+} else {
+  app.set('secretKey', 'sdlfk');
+}
 
 app.post('/authenticate', (request, response) => {
   const email = request.body.email;
@@ -35,12 +39,11 @@ app.post('/authenticate', (request, response) => {
   }
 
   const token = jwt.sign({ email, appName }, app.get('secretKey'), { expiresIn: '48h' });
-
   return response.status(201).json(token);
 });
 
 const checkAuth = (request, response, next) => {
-  const { token } = request.headers.token;
+  const { token } = request.headers;
 
   if (!token) {
     return response.status(403).json('Error: You must be authorized to hit this endpoint.');
@@ -55,7 +58,22 @@ const checkAuth = (request, response, next) => {
   });
 };
 
-app.use(checkAuth);
+const checkAdmin = (request, response, next) => {
+  const { token } = request.headers;
+
+  jwt.verify(token, app.get('secretKey'), (error, decoded) => {
+    if (error) {
+      return response.status(403).json('Error: Invalid Token');
+    } else if (decoded.email.includes('@turing.io')) {
+      next();
+    } else {
+      return response.status(403).json('Error: You are not authorized');
+    }
+  });
+};
+
+//----- Open routes -----------------------------//
+
 
 app.get('/', (request, response) => {
   response.send('BYOB!!!!!!');
@@ -93,6 +111,31 @@ app.get('/api/v1/wallets/:id', (request, response) => {
     });
 });
 
+app.get('/api/v1/transactions/:id', (request, response) => {
+  const { id } = request.params;
+
+  database('transactions').where({ id }).select()
+    .then((transaction) => {
+      response.status(200).json(transaction);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    });
+});
+
+
+
+//----- Protected routes -----------------------------//
+
+
+if (process.env.NODE_ENV !== 'test') {
+  app.use(checkAuth);
+}
+
+if (process.env.NODE_ENV !== 'test') {
+  app.use(checkAdmin);
+}
+
 app.post('/api/v1/wallets', (request, response) => {
   const wallet = request.body;
 
@@ -123,18 +166,6 @@ app.post('/api/v1/transactions', (request, response) => {
   database('transactions').insert(transaction, 'id')
     .then(transactionId => response.status(201).json({ id: transactionId[0] }))
     .catch(error => response.status(500).json({ error }));
-});
-
-app.get('/api/v1/transactions/:id', (request, response) => {
-  const { id } = request.params;
-
-  database('transactions').where({ id }).select()
-    .then((transaction) => {
-      response.status(200).json(transaction);
-    })
-    .catch((error) => {
-      response.status(500).json({ error });
-    });
 });
 
 app.patch('/api/v1/transactions/:id', (request, response) => {
@@ -178,20 +209,17 @@ app.delete('/api/v1/transactions/:id', (request, response) => {
 app.delete('/api/v1/wallets/:id', (request, response) => {
   const { id } = request.params;
 
-  database('transactions').where({ to: id }).orWhere({ from: id }).del()
-    .then(() => {
-      database('wallets').where({ id }).del()
-        .then((wallet) => {
-          response.status(200).json(wallet);
-        })
-        .catch((error) => {
-          response.status(500).json({ error });
-        });
+  database('wallets').where({ id }).del()
+    .then((wallet) => {
+      response.status(200).json(wallet);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
     });
 });
 
 app.listen(app.get('port'), () => {
-/* eslint-disable no-console */
+  /* eslint-disable no-console */
   console.log(`${app.locals.title} is running on ${app.get('port')}. env: ${environment}`);
 });
 
