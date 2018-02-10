@@ -44,7 +44,6 @@ describe('API Routes', () => {
       return chai.request(server)
       .get('/api/v1/wallets')
       .then(response => {
-        console.log(response.body[0])
         response.should.have.status(200);
         response.should.be.json;
         response.body.should.be.a('array');
@@ -90,7 +89,6 @@ describe('API Routes', () => {
         response.should.have.status(201);
         response.body.should.be.a('object');
         response.body.should.have.property('id')
-        console.log(response.body.id)
       })
       .catch(error => {
         throw error;
@@ -160,7 +158,6 @@ describe('API Routes', () => {
     return chai.request(server)
       .get('/api/v1/transactions')
       .then(response => {
-        console.log(response.body[0])
         response.should.have.status(200);
         response.should.be.a('object');
         response.body[0].should.have.property('txHash');
