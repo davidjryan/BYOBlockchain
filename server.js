@@ -17,8 +17,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.locals.title = 'BYOBlockchain';
 
 const requireHTTPS = (req, res, next) => {
-  if (req.headers['x-forwarded=proto'] !== 'https' && process.env.NODE_ENV === 'production') {
-    return res.redirect(`https://${req.get('host')}${req.url}`);
+  if (req.headers['x-forwarded=proto'] !== 'https') {
+    return res.redirect('https://' + req.get('host') + req.url);
   }
   next();
 };
@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(requireHTTPS); 
   app.set('secretKey', process.env.secretKey); 
 } else {
-  app.set('secretKey', 'sdlfk');
+  app.set('secretKey', 'devSecret');
 }
 
 app.post('/authenticate', (request, response) => {
@@ -139,9 +139,6 @@ app.get('/api/v1/transactions/:id', (request, response) => {
 
 if (process.env.NODE_ENV !== 'test') {
   app.use(checkAuth);
-}
-
-if (process.env.NODE_ENV !== 'test') {
   app.use(checkAdmin);
 }
 
