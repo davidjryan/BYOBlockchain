@@ -85,7 +85,7 @@ app.get('/api/v1/transactions', (request, response) => {
       response.status(200).json(transactions);
     })
     .catch((error) => {
-      response.status(500).json({ error });
+      response.status(404).json({ error });
     });
 });
 
@@ -95,31 +95,40 @@ app.get('/api/v1/wallets', (request, response) => {
       response.status(200).json(wallets);
     })
     .catch((error) => {
-      response.status(500).json({ error });
+      response.status(404).json({ error });
     });
 });
 
 app.get('/api/v1/wallets/:id', (request, response) => {
   const { id } = request.params;
 
-  database('wallets').where({ id }).select()
+  database('wallets').where({ id }).first()
     .then((wallet) => {
-      response.status(200).json(wallet);
+      if (!wallet) {
+        response.status(404).json({ error: 'Not found'});
+      } else {
+        response.status(200).json(wallet);  
+      }
     })
     .catch((error) => {
-      response.status(500).json({ error });
+      response.status(422).json({ error });
     });
 });
 
 app.get('/api/v1/transactions/:id', (request, response) => {
   const { id } = request.params;
 
-  database('transactions').where({ id }).select()
+  database('transactions').where({ id }).first()
     .then((transaction) => {
-      response.status(200).json(transaction);
+      if (!transaction) {
+        response.status(404).json({ error: 'Not found'});
+
+      } else {
+        response.status(200).json(transaction);
+      }
     })
     .catch((error) => {
-      response.status(500).json({ error });
+      response.status(422).json({ error });
     });
 });
 
@@ -149,7 +158,7 @@ app.post('/api/v1/wallets', (request, response) => {
 
   database('wallets').insert(wallet, 'id')
     .then(wallet => response.status(201).json({ id: wallet[0] }))
-    .catch(error => response.status(500).json({ error }));
+    .catch(error => response.status(404).json({ error }));
 });
 
 app.post('/api/v1/transactions', (request, response) => {
@@ -165,19 +174,23 @@ app.post('/api/v1/transactions', (request, response) => {
 
   database('transactions').insert(transaction, 'id')
     .then(transactionId => response.status(201).json({ id: transactionId[0] }))
-    .catch(error => response.status(500).json({ error }));
+    .catch(error => response.status(422).json({ error }));
 });
 
 app.patch('/api/v1/transactions/:id', (request, response) => {
   const { id } = request.params;
   const { amount } = request.body;
 
-  database('transactions').where('id', '=', id).update({ amount })
+  database('transactions').where({ id }).update({ amount })
     .then((transaction) => {
-      response.status(200).json(transaction.id);
+      if (!transaction) {
+        response.status(404).json({ error: 'Not found' });
+      } else {
+        response.status(200).json(transaction);
+      }
     })
     .catch((error) => {
-      response.status(500).json({ error });
+      response.status(422).json({ error });
     });
 });
 
@@ -185,12 +198,16 @@ app.patch('/api/v1/wallets/:id', (request, response) => {
   const { id } = request.params;
   const { balance } = request.body;
 
-  database('wallets').where('id', '=', id).update({ balance })
+  database('wallets').where({ id }).update({ balance })
     .then((wallet) => {
-      response.status(200).json(wallet);
+      if (!wallet) {
+        response.status(404).json({ error: 'Wallet not found' });
+      } else {
+        response.status(200).json();
+      }
     })
     .catch((error) => {
-      response.status(500).json({ error });
+      response.status(422).json({ error });
     });
 });
 
@@ -202,20 +219,25 @@ app.delete('/api/v1/transactions/:id', (request, response) => {
       response.status(200).json(transaction);
     })
     .catch((error) => {
-      response.status(500).json({ error });
+      response.status(422).json({ error });
     });
 });
 
 app.delete('/api/v1/wallets/:id', (request, response) => {
   const { id } = request.params;
   database('transactions').where({ to: id }).orWhere({ from: id }).del()
+
     .then(() => {
       database('wallets').where({ id }).del()
         .then((wallet) => {
-          response.status(200).json(wallet);
+          if (!wallet) {
+            response.status(404).json({ error: 'No wallet found' });
+          } else {
+            response.status(204).json(wallet);
+          }
         })
         .catch((error) => {
-          response.status(500).json({ error });
+          response.status(422).json({ error });
         });
     });
 });

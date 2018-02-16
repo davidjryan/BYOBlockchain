@@ -60,15 +60,29 @@ describe('API Routes', () => {
     });
   });
 
-  describe('GET api/v1/wallets', () => {
+
+  describe('GET api/v1/wallets/:id', () => {
     it('should return a single wallet', () => {
       return chai.request(server)
       .get('/api/v1/wallets/1')
       .then(response => {
         response.should.have.status(200);
         response.should.be.json;
-        response.body.should.be.a('array');
-        response.res.should.be.a('object');
+        response.body.should.be.a('object');
+      })
+      .catch(error => {
+        throw error;
+      })
+    })
+
+    it('should return 404 if a single wallet is not found', () => {
+      return chai.request(server)
+      .get('/api/v1/wallets/300')
+      .then(response => {
+        response.should.have.status(404);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.equal('Not found')
       })
       .catch(error => {
         throw error;
@@ -123,8 +137,19 @@ describe('API Routes', () => {
     it('should delete a wallet', () => {
       return chai.request(server)
       .delete(`/api/v1/wallets/${walletToDelete.id}`)
-      then(response => {
+      .then(response => {
         response.should.have.status(204)
+      })
+      .catch(error => {
+        throw error;
+      })
+    })
+
+    it('should return a 404 if a wallet to delete is not found', () => {
+      return chai.request(server)
+      .delete('/api/v1/wallets/300')
+      then(response => {
+        response.should.have.status(404)
       })
       .catch(error => {
         throw error;
@@ -141,11 +166,22 @@ describe('API Routes', () => {
       })
     })
 
-    it('should delete a wallet', () => {
+    it('should delete a transaction', () => {
       return chai.request(server)
       .delete(`/api/v1/wallets/${transToDelete.id}`)
       then(response => {
         response.should.have.status(204)
+      })
+      .catch(error => {
+        throw error;
+      })
+    })
+
+    it('should return a 404 if a transaction to delete is not found', () => {
+      return chai.request(server)
+      .delete('/api/v1/transactions/300')
+      then(response => {
+        response.should.have.status(404)
       })
       .catch(error => {
         throw error;
@@ -159,7 +195,7 @@ describe('API Routes', () => {
       .get('/api/v1/transactions')
       .then(response => {
         response.should.have.status(200);
-        response.should.be.a('object');
+        response.body.should.be.a('array');
         response.body[0].should.have.property('txHash');
         response.body[0].txHash.should.equal('baff34eaf5d64d70e6b8a41c81b6a2163aa9afe020d6e8f6fee8a7007c15ead6');
         response.body[0].should.have.property('amount');
@@ -187,6 +223,21 @@ describe('API Routes', () => {
         throw error;
       })
     })
+
+    it('should return 404 if a single transaction is not found', () => {
+      return chai.request(server)
+      .get('/api/v1/transactions/300')
+      .then(response => {
+        response.should.have.status(404);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.equal('Not found')
+      })
+      .catch(error => {
+        throw error;
+      })
+    })
+
   })
 
   describe('POST api/v1/transactions', () => {
@@ -209,6 +260,21 @@ describe('API Routes', () => {
         throw error;
       })
     })
+
+    it('should return a 422 when a required param is missing', () => {
+      return chai.request(server)
+      .post('/api/v1/transactions')
+      .send({
+        txHash: '54321'
+      })
+      .then(response => {
+        response.should.have.status(422);
+      })
+      .catch(error => {
+        throw error;
+      })
+    })
+
   })
 
   describe('PATCH api/v1/transactions/:id', () => {
@@ -220,12 +286,27 @@ describe('API Routes', () => {
         })
         .then(response => {
           response.should.have.status(200);
-          response.should.be.a('object');
         })
         .catch(error => {
           throw error;
         })
     })
+
+    it('should return a 404 if the transaction is not found', () => {
+      return chai.request(server)
+        .patch('/api/v1/transactions/300')
+        .send({
+          amount: '1000'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.body.should.be.a('object');
+        })
+        .catch(error => {
+          throw error
+        })
+    })
+
   })
 
   describe('PATCH api/v1/wallets/:id', () => {
@@ -243,6 +324,22 @@ describe('API Routes', () => {
           throw error;
         })
     })
+
+    it('should return a 404 if the wallet is not found', () => {
+      return chai.request(server)
+        .patch('/api/v1/wallets/300')
+        .send({
+          balance: '45'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.a('object');
+        })
+        .catch(error => {
+          throw error
+        })
+    })
+
   })
 
 });
