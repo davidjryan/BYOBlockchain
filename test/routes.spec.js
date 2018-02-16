@@ -137,7 +137,7 @@ describe('API Routes', () => {
     it('should delete a wallet', () => {
       return chai.request(server)
       .delete(`/api/v1/wallets/${walletToDelete.id}`)
-      then(response => {
+      .then(response => {
         response.should.have.status(204)
       })
       .catch(error => {
